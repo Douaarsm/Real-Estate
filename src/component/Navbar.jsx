@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import { Button } from './ui/Button'; // Assurez-vous que le chemin est correct
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +31,7 @@ function Navbar() {
         <button 
           className={`hamburger ${isMenuOpen ? 'active' : ''}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
         >
           <span></span>
           <span></span>
@@ -38,20 +40,42 @@ function Navbar() {
 
         <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
           <Link className="nav-link" to="/" onClick={() => setIsMenuOpen(false)}>
-            Accueil
+            Home
           </Link>
           <Link className="nav-link" to="/properties" onClick={() => setIsMenuOpen(false)}>
-            Nos Propriétés
+            Properties
           </Link>
           <Link className="nav-link" to="/about" onClick={() => setIsMenuOpen(false)}>
-            À propos
+            About
           </Link>
           <Link className="nav-link" to="/contact" onClick={() => setIsMenuOpen(false)}>
             Contact
           </Link>
-          <Link className="nav-button" to="/properties" onClick={() => setIsMenuOpen(false)}>
-            Réserver
-          </Link>
+          {user ? (
+            <>
+              <Link className="nav-link" to="/my-reservations" onClick={() => setIsMenuOpen(false)}>
+                My Reservations
+              </Link>
+              <button 
+                className="nav-button logout" 
+                onClick={() => {
+                  logout();
+                  setIsMenuOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link className="nav-link" to="/signin" onClick={() => setIsMenuOpen(false)}>
+                Sign In
+              </Link>
+              <Link className="nav-button" to="/signup" onClick={() => setIsMenuOpen(false)}>
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

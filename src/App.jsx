@@ -13,18 +13,74 @@ import img9 from './assets/img9.jpg';
 import img10 from './assets/img10.jpg';
 import img11 from './assets/img11.jpg';
 import img12 from './assets/img12.jpg';
-import Navbar from './component/Navbar.jsx';
-import Footer from './component/Footer.jsx';
-import { Button } from "./component/ui/Button";
-import Contact from './pages/Contact.jsx';
-import APropos from './pages/APropos.jsx';
-import Propriete from './pages/Propriete.jsx';
+import Navbar from './component/Navbar';
+import Footer from './components/Footer';
+import { Button } from "./components/ui/Button";
+import Contact from './pages/Contact';
+import APropos from './pages/APropos';
+import Propriete from './pages/Propriete';
 import Reservation from './pages/Reservation';
+import { AuthProvider } from './context/AuthContext';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import PropertyDetail from './pages/PropertyDetail';
+import MyReservations from './pages/MyReservations';
+import ProtectedRoute from './components/ProtectedRoute';
 
-// Fonction bouton séparée
+
 function ButtonDemo() {
   const navigate = useNavigate();
-  return <Button onClick={() => navigate("/properties")}>Découvrir</Button>;
+
+  return (
+    <>
+      <button className="modern-button" onClick={() => navigate("/properties")}>
+        Découvrir
+      </button>
+
+      <style jsx="true">{`
+        .modern-button {
+          padding: 12px 24px;
+          font-size: 16px;
+          font-weight: 600;
+          color: white;
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .modern-button::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 200%;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.1);
+          transform: skewX(-45deg);
+          transition: left 0.5s;
+        }
+
+        .modern-button:hover::after {
+          left: 100%;
+        }
+
+        .modern-button:hover {
+          transform: scale(1.03);
+          box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .modern-button:active {
+          transform: scale(0.97);
+          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+        }
+      `}</style>
+    </>
+  );
 }
 
 // Composant Home
@@ -103,7 +159,6 @@ function Home() {
           </div>
         </div>
       </section>
-      
     </div>
   );
 }
@@ -111,19 +166,32 @@ function Home() {
 function App() {
   return (
     <Router>
-      <div className="app-wrapper">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<APropos />} />
-            <Route path="/properties" element={<Propriete />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/reservation" element={<Reservation />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen bg-gray-50">
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<APropos />} />
+              <Route path="/properties" element={<Propriete />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/reservation" element={<Reservation />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/properties/:id" element={<PropertyDetail />} />
+              <Route
+                path="/my-reservations"
+                element={
+                  <ProtectedRoute>
+                    <MyReservations />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </AuthProvider>
     </Router>
   );
 }
