@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import img1 from './assets/img1.jpg';
 import img2 from './assets/img2.jpg';
@@ -26,7 +26,7 @@ import SignUp from './pages/SignUp';
 import PropertyDetail from './pages/PropertyDetail';
 import MyReservations from './pages/MyReservations';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import Login from './pages/SignIn';
 
 function ButtonDemo() {
   const navigate = useNavigate();
@@ -165,34 +165,33 @@ function Home() {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<APropos />} />
-              <Route path="/properties" element={<Propriete />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/reservation" element={<Reservation />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/properties/:id" element={<PropertyDetail />} />
-              <Route
-                path="/my-reservations"
-                element={
-                  <ProtectedRoute>
-                    <MyReservations />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </AuthProvider>
-    </Router>
+    <AuthProvider>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<APropos />} />
+            <Route path="/properties" element={<Propriete />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/reservation" element={<Reservation />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/properties/:id" element={<PropertyDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/my-reservations"
+              element={
+                <ProtectedRoute>
+                  <MyReservations />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 }
 

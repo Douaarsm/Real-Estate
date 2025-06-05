@@ -207,7 +207,14 @@
   margin-bottom: 1.5rem;
 }
 
-.new-reservation-btn {
+.success-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.new-reservation-btn,
+.view-reservations-btn {
   background: #4a90e2;
   color: white;
   padding: 0.75rem 1.5rem;
@@ -216,10 +223,57 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
 }
 
-.new-reservation-btn:hover {
+.new-reservation-btn:hover,
+.view-reservations-btn:hover {
   background: #357abd;
+}
+
+.view-reservations-btn {
+  background: #28a745;
+}
+
+.view-reservations-btn:hover {
+  background: #218838;
+}
+
+/* User Reservations Section Styles */
+.user-reservations-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.user-reservations-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.user-reservations-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reservation-item {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.reservation-item p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.reservation-item strong {
+  color: #333;
 }
 
 /* Responsive Design */

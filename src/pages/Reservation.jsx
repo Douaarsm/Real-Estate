@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import './Reservation.css';
 import axios from 'axios';
 
@@ -8,12 +8,36 @@ const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const property = location.state?.property;
+  const [userReservations, setUserReservations] = useState([]);
+  const [loadingReservations, setLoadingReservations] = useState(true);
+  const [reservationError, setReservationError] = useState('');
 
   useEffect(() => {
     if (!property) {
       navigate('/properties');
     }
   }, [property, navigate]);
+
+  useEffect(() => {
+    const fetchUserReservations = async () => {
+      if (!property?._id) return;
+      setLoadingReservations(true);
+      try {
+        // TODO: Replace with actual API call filtering by property and user
+        const response = await axios.get(`http://localhost:3001/api/visits?propertyId=${property._id}&userId=${/* TODO: Get actual user ID */ 'dummyUserId'}`);
+        if (response.status === 200) {
+          setUserReservations(response.data);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des réservations :", error);
+        setReservationError('Impossible de charger vos réservations pour ce bien.');
+      } finally {
+        setLoadingReservations(false);
+      }
+    };
+
+    fetchUserReservations();
+  }, [property?._id]); // Re-run effect when property ID changes
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -133,12 +157,20 @@ const Reservation = () => {
               <i className="fas fa-check-circle"></i>
               <h3>Réservation confirmée !</h3>
               <p>Nous vous contacterons dans les plus brefs délais pour confirmer votre visite.</p>
-              <button 
-                className="new-reservation-btn"
-                onClick={() => navigate('/properties')}
-              >
-                Retour aux propriétés
-              </button>
+              <div className="success-buttons">
+                <button 
+                  className="new-reservation-btn"
+                  onClick={() => navigate('/properties')}
+                >
+                  Retour aux propriétés
+                </button>
+                <Link 
+                  to="/my-reservations"
+                  className="view-reservations-btn"
+                >
+                  Voir mes réservations
+                </Link>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="reservation-form">
@@ -267,6 +299,27 @@ const Reservation = () => {
               </button>
             </form>
           )}
+
+          <div className="user-reservations-section">
+            <h2>Mes réservations pour ce bien</h2>
+            {loadingReservations ? (
+              <p>Chargement des réservations...</p>
+            ) : reservationError ? (
+              <p className="error-message">{reservationError}</p>
+            ) : userReservations.length === 0 ? (
+              <p>Vous n'avez pas encore de réservation pour ce bien.</p>
+            ) : (
+              <ul>
+                {userReservations.map(res => (
+                  <li key={res.id} className="reservation-item">
+                    Date: {new Date(res.visitDate).toLocaleDateString()}<br/>
+                    Heure: {res.visitTime}<br/>
+                    Statut: {res.status || 'N/A'}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ const MyReservations = () => {
     const fetchReservations = async () => {
       try {
         // TODO: Replace with actual API call
-        const response = await fetch(`/api/reservations/user/${user.id}`);
+        const response = await fetch(`http://localhost:3001/api/visits?userId=${user.id}`);
         if (!response.ok) throw new Error('Failed to fetch reservations');
         const data = await response.json();
         setReservations(data);
