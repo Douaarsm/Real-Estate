@@ -9,7 +9,9 @@ const visitSchema = new mongoose.Schema({
   visitDate: String,
   visitTime: String,
   message: String,
-  propertyId: String
+  propertyId: String,
+  userId: String,
+  status: { type: String, default: 'pending' }
 });
 
 module.exports = mongoose.model('Visit', visitSchema);
